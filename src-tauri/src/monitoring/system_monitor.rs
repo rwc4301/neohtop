@@ -3,6 +3,7 @@
 //! This module handles collection and monitoring of system-wide statistics
 //! including CPU, memory, network, and disk usage.
 
+use super::gpu_monitor::GPUMonitor;
 use super::SystemStats;
 use std::fmt::Debug;
 use std::path::Path;
@@ -14,6 +15,7 @@ use sysinfo::{CpuExt, Disk, DiskExt, NetworkExt, NetworksExt, SystemExt};
 pub struct SystemMonitor {
     /// Tracks network usage between updates
     last_network_update: (Instant, u64, u64),
+    gpu_monitor: GPUMonitor,
 }
 
 impl SystemMonitor {
@@ -36,6 +38,7 @@ impl SystemMonitor {
 
         Self {
             last_network_update: (Instant::now(), initial_rx, initial_tx),
+            gpu_monitor: GPUMonitor::new(),
         }
     }
 
@@ -47,6 +50,7 @@ impl SystemMonitor {
     pub fn collect_stats(&mut self, sys: &sysinfo::System) -> SystemStats {
         let (network_rx, network_tx) = self.calculate_network_stats(sys);
         let (disk_total, disk_used, disk_free) = self.calculate_disk_stats(sys);
+        let gpu_stats = self.gpu_monitor.collect_stats();
 
         SystemStats {
             cpu_usage: sys.cpus().iter().map(|cpu| cpu.cpu_usage()).collect(),
@@ -66,6 +70,7 @@ impl SystemMonitor {
             disk_total_bytes: disk_total,
             disk_used_bytes: disk_used,
             disk_free_bytes: disk_free,
+            gpu_stats,
         }
     }
 

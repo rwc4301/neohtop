@@ -6,6 +6,7 @@
     StoragePanel,
     SystemPanel,
     NetworkPanel,
+    GpuPanel,
   } from "$lib/components";
 
   export let systemStats: SystemStats | null = null;
@@ -15,6 +16,8 @@
   {#if systemStats}
     <div class="stats-layout">
       <CpuPanel cpuUsage={systemStats.cpu_usage} />
+
+      <GpuPanel gpuStats={systemStats.gpu_stats} />
 
       <MemoryPanel
         memoryTotal={systemStats.memory_total}

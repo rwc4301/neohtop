@@ -116,4 +116,23 @@ pub struct SystemStats {
     pub disk_used_bytes: u64,
     /// Free disk space in bytes
     pub disk_free_bytes: u64,
+    /// GPU statistics if NVIDIA GPU is available
+    pub gpu_stats: Option<Vec<GPUStats>>,
+}
+
+/// GPU statistics exposed to the frontend
+#[derive(Serialize, Debug)]
+pub struct GPUStats {
+    /// Name of the GPU
+    pub name: String,
+    /// GPU utilization percentage (0-100)
+    pub utilization: f32,
+    /// GPU memory used in bytes
+    pub memory_used: u64,
+    /// GPU total memory in bytes
+    pub memory_total: u64,
+    /// GPU temperature in Celsius
+    pub temperature: i32,
+    /// Power usage in milliwatts
+    pub power_usage: u32,
 }
