@@ -13,14 +13,19 @@
         power_usage: number;
       }[]
     | null;
+
+  $: averageUsage = formatPercentage(
+    gpuStats.map((x) => x.utilization).reduce((a, b) => a + b, 0) /
+      gpuStats.length,
+  );
 </script>
 
 <div class="stat-panel">
-  <PanelHeader icon={faMicrochip} title="GPU" />
+  <PanelHeader icon={faMicrochip} title="GPU" usageValue={averageUsage} />
   {#if gpuStats && gpuStats.length > 0}
     {#each gpuStats as gpu}
       <div class="gpu-stats">
-        <h4>{gpu.name}</h4>
+        <span>{gpu.name}</span>
         <div class="stat-item with-progress">
           <ProgressBar
             label="GPU Usage"
@@ -63,6 +68,17 @@
     color: var(--subtext0);
     text-align: center;
     padding: 1rem;
+  }
+
+  span {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
+    color: var(--subtext0);
   }
 
   h4 {
