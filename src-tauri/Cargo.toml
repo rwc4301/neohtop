@@ -16,11 +16,12 @@ sysinfo = "0.29.0"
 tauri-plugin-shell = "2"
 tauri-plugin-os = "2"
 window-vibrancy = "0.5.2"
-nvml-wrapper = "0.9"
+nvml-wrapper = { version = "0.9", optional = true }
 
 [features]
 default = [ "custom-protocol" ]
 custom-protocol = [ "tauri/custom-protocol" ]
+nvidia = [ "nvml-wrapper" ]
 
 [profile.release]
 panic = "abort"            # Strip expensive panic clean-up logic

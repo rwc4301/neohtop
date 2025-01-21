@@ -14,10 +14,13 @@
       }[]
     | null;
 
-  $: averageUsage = formatPercentage(
-    gpuStats.map((x) => x.utilization).reduce((a, b) => a + b, 0) /
-      gpuStats.length,
-  );
+  $: averageUsage = gpuStats
+    ? formatPercentage(
+        gpuStats.map((x) => x.utilization).reduce((a, b) => a + b, 0) /
+          gpuStats.length,
+      )
+    : 0;
+  console.log(averageUsage);
 </script>
 
 <div class="stat-panel">
